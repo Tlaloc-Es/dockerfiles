@@ -1,0 +1,25 @@
+version: "3.3"
+services:
+  mongo:
+    container_name: mongo
+    image: mongo
+    environment:
+      - MONGO-INITDB_DATABASE=assets-v2
+    ports:
+      - 27017:27017
+    networks:
+      - normalization
+
+
+networks:
+  normalization:
+    driver: bridge
+
+volumes:
+  data01:
+    driver: local
+  zoodata:
+  zoologs:
+  kafkadata:
+  data07:
+    driver: local

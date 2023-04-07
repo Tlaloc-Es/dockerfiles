@@ -1,0 +1,19 @@
+version: "3.7"
+services:
+  multitenant-postgres:
+    image: "postgres:10.6"
+    command: postgres -c max_locks_per_transaction=256
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: "root"
+      POSTGRES_PASSWORD: "root"
+      POSTGRES_DB: "multitenantdb"
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: local@localhost.com
+      PGADMIN_DEFAULT_PASSWORD: local
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+    ports:
+      - "80:80"

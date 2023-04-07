@@ -1,0 +1,55 @@
+version: "3.3"
+services:
+  normalization-redis:
+    container_name: normalization-redis
+    image: redis:5.0
+    command: [redis-server, --notify-keyspace-events Ex]
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - 6379:6379
+    networks:
+      - normalization
+
+  normalization-kibana:
+    container_name: normalization-kibana
+    image: docker.elastic.co/kibana/kibana:7.1.1
+    volumes:
+      - ./kibana.yml:/usr/share/kibana/config/kibana.yml
+    ports:
+      - 5601:5601
+    networks:
+      - normalization
+    depends_on:
+      - normalization-es-server
+
+  normalization-es-server:
+    container_name: normalization-es-server
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.1.1
+    environment:
+      - discovery.type=single-node
+      - bootstrap.memory_lock=false
+      - http.max_initial_line_length=5mb
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    # volumes:
+    #   - data01:/usr/share/elasticsearch/data_normalization
+    ports:
+      - 9200:9200
+    networks:
+      - normalization
+
+networks:
+  normalization:
+    driver: bridge
+
+volumes:
+  data01:
+    driver: local
+  zoodata:
+  zoologs:
+  kafkadata:
+  data07:
+    driver: local
